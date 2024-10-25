@@ -3,7 +3,10 @@ import TodoNew from './components/todo/TodoNew';
 import './components/todo/todo.css';
 import reactLogo from './assets/react.svg';
 import { useState } from 'react';
-
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
 const App = () => {
 
@@ -21,9 +24,7 @@ const App = () => {
   }
 
   const deleteTodo = (id) => {
-    console.log('>>>>>>> gia tri id cua phan tu bi xoa:', id);
     const newTodoList = todoList.filter(item => item.id !== id);
-    console.log('gia tri cua mang bi xoa', newTodoList);
     setTodoList(newTodoList);
   }
 
