@@ -16,9 +16,15 @@ const App = () => {
       id: randomIntFromInterval(1, 1000000),
       name: name
     };
-
     //todoList.push(newTodo); setTodoList(todoList) shouldn't repair value directly in react
     setTodoList([...todoList, newTodo]);
+  }
+
+  const deleteTodo = (id) => {
+    console.log('>>>>>>> gia tri id cua phan tu bi xoa:', id);
+    const newTodoList = todoList.filter(item => item.id !== id);
+    console.log('gia tri cua mang bi xoa', newTodoList);
+    setTodoList(newTodoList);
   }
 
   const randomIntFromInterval = (min, max) => {
@@ -43,7 +49,10 @@ const App = () => {
       } */}
       {
         todoList.length > 0 ?
-          <TodoData todoList={todoList} />
+          <TodoData
+            todoList={todoList}
+            deleteTodo={deleteTodo}
+          />
           :
           <div className='todo-image'>
             <img src={reactLogo} className='logo' />
