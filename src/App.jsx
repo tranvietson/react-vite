@@ -3,10 +3,9 @@ import TodoNew from './components/todo/TodoNew';
 import './components/todo/todo.css';
 import reactLogo from './assets/react.svg';
 import { useState } from 'react';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import Header from './components/layout/header';
+import Footer from './components/layout/footer';
+
 
 const App = () => {
 
@@ -34,11 +33,13 @@ const App = () => {
 
 
   return (
-    <div className="todo-container">
-      <div className="todo-title">Todo List</div>
-      <TodoNew addNewTodo={addNewTodo} />
+    <>
+      <Header />
+      <div className="todo-container">
+        <div className="todo-title">Todo List</div>
+        <TodoNew addNewTodo={addNewTodo} />
 
-      {/* {(todoList.length === 0) &&
+        {/* {(todoList.length === 0) &&
         <div className='todo-image'>
           <img src={reactLogo} className='logo' />
         </div>
@@ -48,18 +49,21 @@ const App = () => {
         todoList.length > 0 &&
         <TodoData todoList={todoList} />
       } */}
-      {
-        todoList.length > 0 ?
-          <TodoData
-            todoList={todoList}
-            deleteTodo={deleteTodo}
-          />
-          :
-          <div className='todo-image'>
-            <img src={reactLogo} className='logo' />
-          </div>
-      }
-    </div>
+        {
+          todoList.lengt > 0 ?
+            <TodoData
+              todoList={todoList}
+              deleteTodo={deleteTodo}
+            />
+            :
+            <div className='todo-image'>
+              <img src={reactLogo} className='logo' />
+            </div>
+        }
+      </div>
+      <Footer />
+    </>
+
   )
 }
 
