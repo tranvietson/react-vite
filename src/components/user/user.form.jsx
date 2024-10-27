@@ -11,11 +11,17 @@ const UserForm = () => {
 
     const handleClickBtn = async () => {
         const res = await createUserAPI(fullName, email, password, phone);
+        // debugger
         console.log('>>>>>>>>> check res data:', res.data);
         if (res.data && res.data) {
             notification.success({
                 message: "create user",
                 description: "Tạo user thành công"
+            })
+        } else {
+            notification.error({
+                message: "Error create user",
+                description: JSON.stringify(res.message)
             })
         }
 
