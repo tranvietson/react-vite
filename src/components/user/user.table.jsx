@@ -1,21 +1,65 @@
 
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Space, Table, Tag } from 'antd';
+import { Space, Table, Tag, notification } from 'antd';
 import UpdateUserModal from './update.user.modal';
 import { useState } from 'react';
+import ViewUserDetail from './view.user.detail';
+import DeleteUser from './delete.user';
+import { Button, message, Popconfirm } from 'antd';
+import { deleteUserAPI } from '../../services/api.service';
 
+
+const handleDeleteUser = (userId) => {
+    console.log('bat event e:', e);
+    message.success('Click on Yes', e.onClick());
+
+};
+const cancel = (e) => {
+    console.log(e);
+    message.error('Click on No');
+};
 
 const UserTable = (props) => {
     const { dataUsers, loadUser } = props;
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
-    const [dataUpdate, setDataUpdate] = useState({});
+    const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+    const [dataUpdate, setDataUpdate] = useState(null);
+    const [dataUserDetail, setDataUserDetail] = useState(null)
+
+    const handleDeleteUser = async (userId) => {
+        // console.log('>>>>>>>>> click user id delete:', userId);
+        const res = await deleteUserAPI(userId);
+        if (res.data) {
+            // console.log('>>>>>>>>>>> check res', res);
+            notification.success({
+                message: "Delete user",
+                description: "Xoa user thanh cong"
+            })
+            await loadUser();
+        } else {
+            notification.error({
+                message: "Error delete user",
+                description: JSON.stringify(res.message)
+            })
+        }
+
+
+    }
+
+
 
     const columns = [
         {
             title: 'id',
             dataIndex: '_id',
             render: (_, record) => (
-                <a href='#' >{record._id}</a>
+                <a
+                    href='#'
+                    onClick={() => {
+                        setIsOpenDrawer(true);
+                        setDataUserDetail(record);
+                    }}
+                >{record._id}</a>
             ),
         },
         {
@@ -41,11 +85,26 @@ const UserTable = (props) => {
                             setIsModalUpdateOpen(true)
                         }}
                     />
-                    <DeleteOutlined style={{ cursor: "pointer", color: "red" }} />
+                    <Popconfirm
+                        title="Delete the task"
+                        description="Are you sure to delete this task?"
+                        onConfirm={() => { handleDeleteUser(record._id) }}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <DeleteOutlined
+                            style={{ cursor: "pointer", color: "red" }}
+
+                        />
+                    </Popconfirm>
+
                 </div>
             ),
         },
     ];
+
+
 
 
     // const data = [
@@ -71,9 +130,9 @@ const UserTable = (props) => {
     //         tags: ['cool', 'teacher'],
     //     },
     // ];
-    console.log(">>>>>>>> run render 222 in user.table", dataUsers);
+    // console.log(">>>>>>>> run render 222 in user.table", dataUsers);
 
-    console.log('>>>>>>>>>> check dataUPdate 222 value:', dataUpdate);
+    // console.log('>>>>>>>>>> check dataUPdate 222 value:', dataUpdate);
     return (
         <>
             <Table
@@ -87,6 +146,12 @@ const UserTable = (props) => {
                 dataUpdate={dataUpdate}
                 setDataUpdate={setDataUpdate}
                 loadUser={loadUser}
+            />
+            <ViewUserDetail
+                isOpenDrawer={isOpenDrawer}
+                setIsOpenDrawer={setIsOpenDrawer}
+                dataUserDetail={dataUserDetail}
+                setDataUserDetail={setDataUserDetail}
             />
         </>
 
