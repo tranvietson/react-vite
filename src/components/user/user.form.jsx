@@ -1,6 +1,5 @@
-import { Input, notification, Modal } from "antd";
-import { Button } from "antd";
 import { useState } from "react";
+import { Input, notification, Modal, Button } from "antd";
 import { createUserAPI } from "../../services/api.service";
 
 const UserForm = (props) => {
@@ -17,14 +16,13 @@ const UserForm = (props) => {
 
         const res = await createUserAPI(fullName, email, password, phone);
         // debugger
-        console.log('>>>>>>>>> check res data:', res.data);
+        console.log('***********check res of createUserAPI data in user.form ********:', res.data);
         if (res.data && res.data) {
             notification.success({
                 message: "create user",
                 description: "Tạo user thành công"
             })
             resetAndCloseModal();
-            await loadUser();
         } else {
             notification.error({
                 message: "Error create user",
@@ -35,14 +33,16 @@ const UserForm = (props) => {
     }
 
     const resetAndCloseModal = () => {
+        console.log("*************** reset state in user.form *****************");
         setFullName("");
         setEmail("");
         setPassword("");
         setPhone("");
         setIsModalOpen(false);
+        loadUser();
     }
 
-    // console.log(">>>> Check input value:", fullName, email, password, phone);
+  //  console.log(">>>> Check input value in user.form:", fullName, email, password, phone);
     return (
         <div className="user-form" style={{ margin: "10px 0" }}>
 

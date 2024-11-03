@@ -12,20 +12,26 @@ const UserPage = () => {
     ])
     // empty array => run once
     useEffect(() => {
-        console.log(">>>>>>>>>> run useEffect 111");
+        console.log(">>>>>>>>>> run useEffect 111 IN USER PAGE");
         loadUser();
+        console.log('>>>>>end run userEffect after loadUser()<<<<<<<<<<');
     }, []);
 
 
     const loadUser = async () => {
         const res = await fetchAllUserAPI();
+        // console.log('>>>>>>>>> running loadUser in useEffect return data afterthat setState:', res);
         setDataUsers(res.data);
+        console.log('>>>>>>>>>>>> after setDataUser state')
     }
-    console.log(">>>>>>>>>> run before rendering 000");
+    console.log(">>>>>>>>>> run before rendering 000 IN USER PAGE");
     return (
         <div style={{ padding: "20px" }}>
             <UserForm loadUser={loadUser} />
-            <UserTable dataUsers={dataUsers} />
+            <UserTable
+                dataUsers={dataUsers}
+                loadUser={loadUser}
+            />
         </div>
     )
 }
