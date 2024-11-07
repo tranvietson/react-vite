@@ -9,22 +9,24 @@ import { Button, message, Popconfirm } from 'antd';
 import { deleteUserAPI } from '../../services/api.service';
 
 
-const handleDeleteUser = (userId) => {
-    console.log('bat event e:', e);
-    message.success('Click on Yes', e.onClick());
-
-};
-const cancel = (e) => {
-    console.log(e);
-    message.error('Click on No');
-};
 
 const UserTable = (props) => {
-    const { dataUsers, loadUser } = props;
+    const { dataUsers, loadUser, current, pageSize, total, setCurrent, setPageSize } = props;
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const [dataUpdate, setDataUpdate] = useState(null);
     const [dataUserDetail, setDataUserDetail] = useState(null)
+
+    // const handleDeleteUser = (userId) => {
+    //     console.log('bat event e:', e);
+    //     message.success('Click on Yes', e.onClick());
+
+    //};
+    const cancel = (e) => {
+        console.log(e);
+        message.error('Click on No');
+    };
+
 
     const handleDeleteUser = async (userId) => {
         // console.log('>>>>>>>>> click user id delete:', userId);
@@ -49,6 +51,14 @@ const UserTable = (props) => {
 
 
     const columns = [
+        {
+            title: 'STT',
+            dataIndex: '_id',
+            render: (_, record, index) => (
+                <a
+                >{(index + 1) + (current - 1) * pageSize}</a>
+            ),
+        },
         {
             title: 'id',
             dataIndex: '_id',
@@ -133,12 +143,39 @@ const UserTable = (props) => {
     // console.log(">>>>>>>> run render 222 in user.table", dataUsers);
 
     // console.log('>>>>>>>>>> check dataUPdate 222 value:', dataUpdate);
+    const onChange = (pagination, filters, sorter, extra) => {
+        // setCurrent, setPageSize for user component if
+        // change current
+        if (pagination && pagination.current) {
+            if (+pagination.current !== +current) {
+                setCurrent(+pagination.current)
+            }
+        }
+        // if change pageSize
+        if (pagination && pagination.pageSize) {
+            if (+pagination.pageSize !== +pageSize) {
+                setPageSize(+pagination.pageSize)
+            }
+        }
+
+    };
+
     return (
         <>
             <Table
                 columns={columns}
                 dataSource={dataUsers}
                 rowKey={"_id"}
+
+                pagination={
+                    {
+                        current: current,
+                        pageSize: pageSize,
+                        showSizeChanger: true,
+                        total: total,
+                        showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
+                    }}
+                onChange={onChange}
             />
             <UpdateUserModal
                 isModalUpdateOpen={isModalUpdateOpen}
