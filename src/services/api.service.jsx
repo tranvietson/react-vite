@@ -91,6 +91,39 @@ const getAccountAPI = () => {
     return axios.get(URL_BACKEND);
 }
 
+const getBookAPI = (currentPage, pageSize) => {
+    const URL_BACKEND = `http://localhost:8080/api/v1/book?current=${currentPage}&pageSize=${pageSize}`;
+
+    return axios.get(URL_BACKEND);
+}
+
+const createBookAPI = (thumbnail, mainText, author, price, quantity, category) => {
+    const URL_BACKEND = "/api/v1/book";
+    const data = {
+        "thumbnail": thumbnail,
+        "mainText": mainText,
+        "author": author,
+        "price": price,
+        "quantity": quantity,
+        "category": category
+    }
+    return axios.post(URL_BACKEND, data);
+}
+
+const updateBookAPI = (book_Id, thumbnail, mainText, author, price, quantity, category) => {
+    const URL_BACKEND = "/api/v1/book";
+    const data = {
+        "_id": book_Id,
+        "thumbnail": thumbnail,
+        "mainText": mainText,
+        "author": author,
+        "price": price,
+        "quantity": quantity,
+        "category": category
+    }
+    return axios.put(URL_BACKEND, data);
+}
+
 export {
     createUserAPI,
     fetchAllUserAPI,
@@ -101,5 +134,8 @@ export {
     registerUserAPI,
     loginAPI,
     getAccountAPI,
-    logoutAPI
+    logoutAPI,
+    getBookAPI,
+    createBookAPI,
+    updateBookAPI
 }

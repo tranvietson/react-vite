@@ -1,20 +1,21 @@
 import { Button, Drawer, notification } from "antd";
 import { useState } from "react";
-import { handleUploadFile, updateUserAvatarAPI } from "../../services/api.service";
+import { createBookAPI, handleUploadFile, updateUserAvatarAPI } from "../../services/api.service";
 
-const ViewUserDetail = (props) => {
+const ViewBookDetail = (props) => {
 
     const {
         isOpenDrawer,
         setIsOpenDrawer,
-        dataUserDetail,
-        setDataUserDetail,
+        dataBookDetail,
+        setDataBookDetail,
         loadUser
     } = props;
 
     const [selectedFile, setSelectedFile] = useState(null)
     const [preview, setPreview] = useState(null)
     // console.log('>>>>>>>>>>>>> check data user detail', dataUserDetail);
+
     const handleOnchangeFile = (event) => {
         if (!event.target.files || event.target.files.length === 0) {
             setSelectedFile(null);
@@ -26,68 +27,71 @@ const ViewUserDetail = (props) => {
             setSelectedFile(file);
             setPreview(URL.createObjectURL(file))
         }
-        console.log(">>>>>>>>> check 1 selectedfile:", selectedFile);
-        console.log(">>>>>>>>>>>>check preview:", preview);
+
     }
 
-    const handleUpdateUserAvatar = async () => {
+    const handleUpdateBook = async () => {
         // step 1: upload file
-        console.log('>>>>>>>>> check 2 file: ', selectedFile);
-        return;
-        const resUpload = await handleUploadFile(selectedFile, "avatar");
+        // console.log('>>>>>>>>> check file: ', selectedFile);
+        const resUpload = await handleUploadFile(selectedFile, "book");
         console.log('>>>>>> Check resUpload:', resUpload);
         // step 2: update user
-        if (resUpload.data) {
-            // success
-            const newAvatar = resUpload.data.fileUploaded;
-            const resUpdateAvatar = await updateUserAvatarAPI(
-                newAvatar, dataUserDetail._id, dataUserDetail.fullName, dataUserDetail.phone
-            );
-            if (resUpdateAvatar.data) {
-                setIsOpenDrawer(false);
-                setSelectedFile(null);
-                setPreview(null);
-                loadUser();
-                notification.success({
-                    message: "Update user avatar",
-                    description: " Cập nhật avatar thành công"
-                })
-            } else {
-                notification.error({
-                    message: "Error update file",
-                    description: JSON.stringify(resUpdateAvatar.data)
-                })
-            }
-        } else {
-            // failed
-            notification.error({
-                message: "Error upload file",
-                description: JSON.stringify(resUpload.message)
-            })
-        }
+        // if (resUpload.data) {
+        //     // success
+        //     const newAvatar = resUpload.data.fileUploaded;
+        //     const resUpdateAvatar = await createBookAPI(
+        //         thumbnail, mainText, author, price, quantity, category
+        //     );
+        //     if (resUpdateAvatar.data) {
+        //         setIsOpenDrawer(false);
+        //         setSelectedFile(null);
+        //         setPreview(null);
+        //         loadUser();
+        //         notification.success({
+        //             message: "Update user avatar",
+        //             description: " Cập nhật avatar thành công"
+        //         })
+        //     } else {
+        //         notification.error({
+        //             message: "Error update file",
+        //             description: JSON.stringify(resUpdateAvatar.data)
+        //         })
+        //     }
+        // } else {
+        //     // failed
+        //     notification.error({
+        //         message: "Error upload file",
+        //         description: JSON.stringify(resUpload.message)
+        //     })
+        // }
     }
 
     return (
         <>
             <Drawer
                 width={"30vw"}
-                title="Basic Drawer"
+                title="Chi tiết sách"
                 onClose={() => {
                     setIsOpenDrawer(false);
-                    setDataUserDetail(null);
+                    setDataUserDetail(null)
                 }
                 }
                 open={isOpenDrawer}
             >
-                {dataUserDetail ?
+                {dataBookDetail ?
                     <>
-                        <p>{dataUserDetail._id}</p>
+                        <p>Id: {dataBookDetail._id}</p>
                         <br />
-                        <p>{dataUserDetail.fullName}</p>
+                        <p>Tiêu đề: {dataBookDetail.mainText}</p>
                         <br />
-                        <p>{dataUserDetail.email}</p>
+                        <p>Tác giả: {dataBookDetail.author}</p>
                         <br />
-                        <p>{dataUserDetail.phone}</p>
+                        <p>Thể loại: {dataBookDetail.category}</p>
+                        <br />
+                        <p>Giá tiền: {
+                            new Intl.NumberFormat('vi-VN',
+                                { style: 'currency', currency: 'VND' }).format(dataBookDetail.price)
+                        }</p>
                         <br />
                         <p>Avatar:</p>
                         <div style={{
@@ -97,7 +101,7 @@ const ViewUserDetail = (props) => {
                             border: "1px solid #ccc"
                         }}>
                             <img style={{ height: "100%", width: "100%", objectFit: "contain" }}
-                                src={`${import.meta.env.VITE_BACKEND_URL}/images/avatar/${dataUserDetail.avatar}`} />
+                                src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${dataBookDetail.thumbnail}`} />
                         </div>
                         <div>
                             <label htmlFor="btnUpload"
@@ -131,7 +135,7 @@ const ViewUserDetail = (props) => {
                             </div>
                         }
                         <Button type="primary"
-                            onClick={() => handleUpdateUserAvatar()}
+                            onClick={() => handleUpdateBook()}
                         >Save</Button>
                     </>
                     :
@@ -143,4 +147,4 @@ const ViewUserDetail = (props) => {
     )
 }
 
-export default ViewUserDetail;
+export default ViewBookDetail;

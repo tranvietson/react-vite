@@ -31,6 +31,7 @@ const UserPage = () => {
         }
         console.log('>>>>>>>>>>>> after setDataUser state')
     }
+
     console.log(">>>>>>>>>> run before rendering 000 IN USER PAGE");
     return (
         <div style={{ padding: "20px" }}>

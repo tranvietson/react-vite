@@ -68,6 +68,7 @@ const UserTable = (props) => {
                     onClick={() => {
                         setIsOpenDrawer(true);
                         setDataUserDetail(record);
+                        //  alert(`##### check record #####, ${record._id}`);
                     }}
                 >{record._id}</a>
             ),
@@ -90,7 +91,7 @@ const UserTable = (props) => {
                     <EditOutlined
                         style={{ cursor: "pointer", color: "orange" }}
                         onClick={() => {
-                            // console.log(">>>>>>> check each record after click it:", record);
+                            // console.log(">>>>>>> check __ underScored:", _, record);
                             setDataUpdate(record);
                             setIsModalUpdateOpen(true)
                         }}
@@ -157,7 +158,6 @@ const UserTable = (props) => {
                 setPageSize(+pagination.pageSize)
             }
         }
-
     };
 
     return (
